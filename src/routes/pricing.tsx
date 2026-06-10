@@ -26,7 +26,7 @@ function PricingPage() {
             Priced by the <span className="italic text-primary">gram.</span>
           </h1>
           <p className="mt-5 max-w-xl text-muted-foreground">
-            Material is the main cost. No design fees on simple parts, no setup nonsense, no subscription.
+            Material is the main cost. No design fees on simple parts, no setup needed, no subscription.
           </p>
         </div>
       </section>
@@ -74,9 +74,6 @@ function PricingPage() {
               </div>
             ))}
           </div>
-          <p className="mt-4 font-mono text-xs text-subtle">
-            ↑ Edit <span className="text-foreground">src/routes/pricing.tsx</span> → <span className="text-foreground">ROWS</span> with your real numbers.
-          </p>
         </div>
       </section>
 
@@ -104,9 +101,6 @@ function PricingPage() {
               </motion.div>
             ))}
           </div>
-          <p className="mt-4 font-mono text-xs text-subtle">
-            ↑ Edit <span className="text-foreground">EXAMPLES</span> with your own past jobs.
-          </p>
         </div>
       </section>
 
@@ -161,20 +155,19 @@ const ROWS = [
   { name: "PLA", note: "Standard, most colors in stock.", rate: "€0.05 / g" },
   { name: "PETG", note: "Stronger, heat-resistant. Not in stock.", rate: "€0.08 / g + setup" },
   { name: "TPU", note: "Flexible, rubber-like. Not in stock.", rate: "€0.10 / g + setup" },
-  { name: "Minimum order", note: "Any job under 15g.", rate: "€0.75" },
-  { name: "Rush turnaround", note: "Same-week priority slot.", rate: "+25%" },
-  { name: "Custom design", note: "Modeling from scratch (per hour).", rate: "Ask first" },
+  { name: "Rush turnaround", note: "Same-week priority slot.", rate: "+20%" },
+  { name: "Custom design", note: "Modeling from scratch (per hour).", rate: "Ask first, let's discuss possibilities" },
 ];
 
 const EXAMPLES = [
-  { icon: "ti-device-mobile", title: "Phone stand", detail: "Adjustable angle, PLA, white.", weight: "~32 g", price: "€1.60" },
-  { icon: "ti-puzzle", title: "Knex connector pack", detail: "Set of 12 replacement pieces.", weight: "~18 g", price: "€0.90" },
-  { icon: "ti-rocket", title: "Model rocket nose cone", detail: "Scale model, PETG, red.", weight: "~74 g", price: "€5.92" },
+  { icon: "ti-device-mobile", title: "3d printed karambit", detail: "PLA, Black.", weight: "~20 g", price: "€1" },
+  { icon: "ti-puzzle", title: "Fruit and vegetables labels", detail: "Set of 12 labels", weight: "~10 g a piece", price: "€0.50 a piece" },
+  { icon: "ti-rocket", title: ""Pallet" coaster", detail: "PLA Wood", weight: "~30 g", price: "€1,33" },
 ];
 
 const FAQ = [
-  { q: "Do you ship?", a: "Local pickup in Eindhoven is free. Shipping is added at cost, no markup." },
-  { q: "What's the lead time?", a: "Usually 2–5 days from confirmation. Rush slots available." },
-  { q: "Can I bring my own .STL?", a: "Yes — send it with the request, or link to it. Anything sliceable works." },
+  { q: "Do you ship?", a: "Local pickup in Oss is free. Shipping is added at cost, no markup." },
+  { q: "What's the lead time?", a: "Usually 3–7 days from confirmation. Rush slots available." },
+  { q: "Can I bring my own .STL?", a: "Yes, it's encouraged, send it with the request, or link to it. Anything sliceable works." },
   { q: "Big or batch orders?", a: "Discount kicks in over ~500g or 20+ identical parts. Ask in the request." },
 ];
