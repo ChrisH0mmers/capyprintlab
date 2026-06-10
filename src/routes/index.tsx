@@ -1,338 +1,277 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState, useRef, type FormEvent } from "react";
-import { motion, AnimatePresence, LayoutGroup } from "motion/react";
-import { toast, Toaster } from "sonner";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion } from "motion/react";
+import { SiteLayout } from "@/components/site-layout";
 
 export const Route = createFileRoute("/")({
-  component: PrintLab,
+  head: () => ({
+    meta: [
+      { title: "PrintLab by CapyMaki — Custom 3D Prints, Made With Care" },
+      { name: "description", content: "A one-person 3D printing lab. Custom parts, models, and accessories printed on a Flashforge Adventurer 5M." },
+      { property: "og:title", content: "PrintLab by CapyMaki" },
+      { property: "og:description", content: "Custom 3D prints, made one at a time." },
+    ],
+  }),
+  component: HomePage,
 });
 
-const FORMSPREE_URL = "https://formspree.io/f/xvzygyoq";
-
-type HobbyKey = "3d" | "knex" | "lego" | "space" | "roller";
-
-const hobbies: { key: HobbyKey; label: string; icon: string; desc: string }[] = [
-  { key: "3d", label: "3D Printing", icon: "ti-printer", desc: "custom parts, models, accessories" },
-  { key: "knex", label: "Knex", icon: "ti-puzzle", desc: "connectors, custom pieces, adapters" },
-  { key: "lego", label: "Lego", icon: "ti-building-castle", desc: "custom bricks, mounts, holders" },
-  { key: "space", label: "Space", icon: "ti-rocket", desc: "rockets, satellites, scale models" },
-  { key: "roller", label: "Roller Coaster", icon: "ti-building-carousel", desc: "track, train, small models" },
-];
-
-const materials = [
-  { id: "PLA", name: "PLA", desc: "Standard · most colors available" },
-  { id: "PETG", name: "PETG", desc: "Stronger · heat-resistant (not in stock — extra costs apply)" },
-  { id: "TPU", name: "TPU", desc: "Flexible · rubber-like (not in stock — extra costs apply)" },
-  { id: "Not sure", name: "Not sure", desc: "I'll recommend one for you" },
-];
-
-const colors = [
-  { name: "White", hex: "#ffffff", ring: true },
-  { name: "Black", hex: "#1a1a18" },
-  { name: "Grey", hex: "#8a8a86" },
-  { name: "Red", hex: "#d83030" },
-  { name: "Orange", hex: "#ef7a2a" },
-  { name: "Yellow", hex: "#f3c52a" },
-  { name: "Green", hex: "#1D9E75" },
-  { name: "Blue", hex: "#2a6cef" },
-  { name: "Purple", hex: "#7a3aef" },
-  { name: "Pink", hex: "#ef58a8" },
-];
-
-function PrintLab() {
-  const [hobby, setHobby] = useState<HobbyKey>("3d");
-  const [material, setMaterial] = useState("PLA");
-  const [color, setColor] = useState("White");
-  const [item, setItem] = useState("");
-  const [desc, setDesc] = useState("");
-  const [name, setName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [itemError, setItemError] = useState(false);
-  const itemRef = useRef<HTMLInputElement>(null);
-
-  const currentHobby = hobbies.find((h) => h.key === hobby)!;
-
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!item.trim()) {
-      setItemError(true);
-      itemRef.current?.focus();
-      toast.error("Please describe what you want printed.");
-      setTimeout(() => setItemError(false), 1500);
-      return;
-    }
-    setLoading(true);
-    try {
-      const res = await fetch(FORMSPREE_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          name: name.trim() || "(not specified)",
-          category: currentHobby.label,
-          item: item.trim(),
-          material,
-          color,
-          description: desc.trim() || "(no extra details)",
-        }),
-      });
-      if (res.ok) {
-        toast.success("Request sent! I'll be in touch soon.");
-        setItem(""); setDesc(""); setName("");
-      } else {
-        toast.error("Something went wrong — try again.");
-      }
-    } catch {
-      toast.error("Network error — try again.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
+function HomePage() {
   return (
-    <main className="mx-auto min-h-screen max-w-[620px] bg-background">
-      <Toaster position="bottom-center" theme="system" richColors />
+    <SiteLayout>
+      <Hero />
+      <Marquee />
+      <Specs />
+      <Process />
+      <Categories />
+      <ClosingCTA />
+    </SiteLayout>
+  );
+}
 
-      {/* HERO */}
-      <header className="relative overflow-hidden border-b border-border px-6 pb-8 pt-10">
-        <div className="bg-grid pointer-events-none absolute inset-0 opacity-70" />
-        <div className="absolute -right-20 -top-20 h-60 w-60 rounded-full bg-primary/15 blur-3xl" />
+/* ──────────────────────────── HERO ──────────────────────────── */
+function Hero() {
+  return (
+    <section className="relative overflow-hidden border-b border-border">
+      <div className="bg-grid bg-grid-fade pointer-events-none absolute inset-0 opacity-60" />
+      <div className="pointer-events-none absolute -top-40 left-1/2 h-[520px] w-[800px] -translate-x-1/2 rounded-full bg-primary/15 blur-[120px]" />
 
+      <div className="relative mx-auto max-w-6xl px-5 pt-16 pb-20 md:pt-28 md:pb-32">
+        {/* status row */}
         <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="relative"
+          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+          className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-widest text-subtle"
         >
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border-strong bg-background px-3 py-1 font-mono text-[11px] tracking-widest text-muted-foreground">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3 py-1">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
             </span>
-            PRINTER ONLINE — Flashforge Adventurer 5M
-          </div>
-
-          <h1 className="font-mono text-[clamp(28px,7vw,38px)] font-bold leading-[1.1]">
-            PrintLab<br />
-            <span className="text-primary">by CapyMaki</span>
-          </h1>
-
-          <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
-            Got an idea? I'll make it real. Request a custom 3D print below.
-            Pricing is <span className="text-foreground">(grams × €0.05)</span> with a starting price of <span className="text-foreground">€0.75</span>.
-          </p>
+            <span className="text-foreground">Printer Online</span>
+            <span className="text-subtle">/ Adventurer 5M</span>
+          </span>
+          <span className="hidden md:inline">— Est. 2024</span>
+          <span className="hidden md:inline">— Eindhoven, NL</span>
         </motion.div>
-      </header>
 
-      <form onSubmit={handleSubmit}>
-        {/* HOBBIES */}
-        <LayoutGroup>
-          <div className="no-scrollbar flex gap-2 overflow-x-auto border-b border-border px-6 py-4">
-            {hobbies.map((h) => {
-              const active = hobby === h.key;
-              return (
-                <button
-                  key={h.key}
-                  type="button"
-                  onClick={() => setHobby(h.key)}
-                  className="relative flex flex-shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] transition-colors"
-                >
-                  {active && (
-                    <motion.span
-                      layoutId="hobbyPill"
-                      className="absolute inset-0 rounded-full border border-primary bg-primary-soft"
-                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                    />
-                  )}
-                  {!active && (
-                    <span className="absolute inset-0 rounded-full border border-border" />
-                  )}
-                  <i className={`ti ${h.icon} relative text-[15px] ${active ? "text-primary-dark" : "text-muted-foreground"}`} />
-                  <span className={`relative whitespace-nowrap ${active ? "font-medium text-primary-darker" : "text-muted-foreground"}`}>
-                    {h.label}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </LayoutGroup>
+        {/* wordmark */}
+        <motion.h1
+          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.05 }}
+          className="mt-8 text-balance font-display text-[clamp(56px,13vw,180px)] font-normal leading-[0.92] tracking-tight"
+        >
+          Custom 3D<br />
+          prints, made<br />
+          <span className="italic text-primary">one at a time.</span>
+        </motion.h1>
 
-        {/* CATEGORY PREVIEW */}
-        <section className="px-6 pt-6">
-          <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-subtle">
-            Selected category
-          </div>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={hobby}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.18 }}
-              className="mt-3 flex items-center gap-3 rounded-[10px] border border-border bg-surface px-4 py-3 text-[13px] text-muted-foreground"
-            >
-              <i className={`ti ${currentHobby.icon} text-lg text-primary`} />
-              <span>
-                <strong className="font-medium text-foreground">{currentHobby.label}</strong> — {currentHobby.desc}
-              </span>
-            </motion.div>
-          </AnimatePresence>
-        </section>
-
-        {/* MATERIAL */}
-        <section className="px-6 pt-6">
-          <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-subtle">
-            Material
-          </div>
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            {materials.map((m) => {
-              const active = material === m.id;
-              return (
-                <motion.button
-                  key={m.id}
-                  type="button"
-                  onClick={() => setMaterial(m.id)}
-                  whileTap={{ scale: 0.97 }}
-                  className={`rounded-[10px] border px-3 py-2.5 text-left transition-colors ${
-                    active
-                      ? "border-[1.5px] border-primary bg-primary-soft"
-                      : "border-border hover:border-border-strong"
-                  }`}
-                >
-                  <div className={`text-[13px] font-medium ${active ? "text-primary-darker" : "text-foreground"}`}>
-                    {m.name}
-                  </div>
-                  <div className={`mt-0.5 text-[11px] leading-snug ${active ? "text-primary-dark" : "text-subtle"}`}>
-                    {m.desc}
-                  </div>
-                </motion.button>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* COLOR */}
-        <section className="px-6 pt-6">
-          <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-subtle">
-            Color preference
-          </div>
-          <p className="mt-1.5 text-[12px] text-subtle">
-            Available options below — other colors may be available on request.
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2.5">
-            {colors.map((c) => {
-              const active = color === c.name;
-              return (
-                <button
-                  key={c.name}
-                  type="button"
-                  aria-label={c.name}
-                  title={c.name}
-                  onClick={() => setColor(c.name)}
-                  className="group relative h-9 w-9 rounded-full transition-transform hover:scale-110"
-                  style={{ background: c.hex, boxShadow: c.ring ? "inset 0 0 0 1px var(--color-border)" : undefined }}
-                >
-                  <AnimatePresence>
-                    {active && (
-                      <motion.span
-                        initial={{ scale: 0.6, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.6, opacity: 0 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 24 }}
-                        className="absolute -inset-1.5 rounded-full ring-2 ring-foreground"
-                      />
-                    )}
-                  </AnimatePresence>
-                </button>
-              );
-            })}
-          </div>
-          <div className="mt-3 font-mono text-[11px] text-subtle">→ {color}</div>
-        </section>
-
-        <hr className="my-6 border-border" />
-
-        {/* TEXT INPUTS */}
-        <section className="space-y-5 px-6">
-          <Field label="What do you want printed?" required>
-            <input
-              ref={itemRef}
-              type="text"
-              value={item}
-              onChange={(e) => { setItem(e.target.value); if (itemError) setItemError(false); }}
-              placeholder="e.g. a phone stand for my desk"
-              className={fieldClass(itemError)}
-            />
-          </Field>
-
-          <Field label="Description & dimensions">
-            <textarea
-              value={desc}
-              onChange={(e) => setDesc(e.target.value)}
-              placeholder="Approx size, reference links, special requests…"
-              className={`${fieldClass(false)} min-h-[100px] resize-y`}
-            />
-          </Field>
-
-          <Field label="Your name and/or email">
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="So I can reach you back"
-              className={fieldClass(false)}
-            />
-          </Field>
-        </section>
-
-        {/* SUBMIT */}
-        <div className="px-6 pb-10 pt-6">
-          <motion.button
-            type="submit"
-            disabled={loading}
-            whileTap={{ scale: 0.98 }}
-            className={`flex w-full items-center justify-center gap-2 rounded-[10px] px-4 py-3.5 text-[15px] font-medium text-primary-foreground transition-colors disabled:cursor-not-allowed disabled:opacity-70 ${
-              loading ? "shimmer" : "bg-primary-dark hover:bg-primary-darker"
-            }`}
+        <div className="mt-10 grid gap-8 md:grid-cols-12">
+          <motion.p
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}
+            className="text-pretty text-base text-muted-foreground md:col-span-7 md:text-lg"
           >
-            {loading ? (
-              <>
-                <i className="ti ti-loader-2 inline-block" style={{ animation: "spin-slow 1s linear infinite" }} />
-                Sending…
-              </>
-            ) : (
-              <>
-                <i className="ti ti-send" />
-                Send request
-              </>
-            )}
-          </motion.button>
-          <div className="mt-3 flex items-center justify-center gap-1.5 text-[12px] text-subtle">
-            <i className="ti ti-lock text-[14px]" />
-            Sent directly — nothing is stored
-          </div>
+            PrintLab is a one-person workshop. You send the idea, I print it
+            carefully on a single machine — no warehouses, no markup, no waiting
+            queue ten people deep. Parts, models, accessories, weird stuff. If it
+            can be sliced, it can probably be made.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="flex flex-wrap items-center gap-3 md:col-span-5 md:justify-end"
+          >
+            <Link
+              to="/request"
+              className="beam-wrap group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground cta-glow transition-transform hover:-translate-y-0.5"
+            >
+              Start a request
+              <i className="ti ti-arrow-up-right text-lg transition-transform group-hover:rotate-45" />
+            </Link>
+            <Link
+              to="/pricing"
+              className="inline-flex items-center gap-2 rounded-full border border-border-strong px-6 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
+            >
+              See pricing
+            </Link>
+          </motion.div>
         </div>
-      </form>
-    </main>
+
+        {/* serial markers */}
+        <div className="mt-16 flex items-end justify-between font-mono text-[10px] uppercase tracking-[0.25em] text-subtle">
+          <span>PL—001 / Hero</span>
+          <motion.span
+            animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 2.4, repeat: Infinity }}
+          >▼ scroll</motion.span>
+          <span>v. 2026</span>
+        </div>
+      </div>
+    </section>
   );
 }
 
-function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+/* ──────────────────────────── MARQUEE ──────────────────────────── */
+function Marquee() {
+  const items = ["PLA", "PETG", "TPU", "Custom Parts", "Lego compatible", "Knex pieces", "Cosplay props", "Replacement bits", "Prototypes", "Scale models", "Rocket fins", "Roller coaster track"];
   return (
-    <label className="block">
-      <span className="mb-1.5 block text-[13px] font-medium text-muted-foreground">
-        {label} {required && <span className="text-danger">*</span>}
-      </span>
-      {children}
-    </label>
+    <section className="relative overflow-hidden border-b border-border bg-surface/40 py-5">
+      <div className="flex whitespace-nowrap animate-marquee">
+        {[...items, ...items].map((label, i) => (
+          <span key={i} className="mx-6 inline-flex items-center gap-6 font-mono text-[13px] uppercase tracking-[0.2em] text-muted-foreground">
+            {label}
+            <span className="h-1 w-1 rounded-full bg-primary/70" />
+          </span>
+        ))}
+      </div>
+    </section>
   );
 }
 
-function fieldClass(error: boolean) {
-  return [
-    "w-full rounded-[10px] border bg-background px-3 py-2.5 text-[14px] outline-none transition",
-    "placeholder:text-subtle",
-    error
-      ? "border-danger ring-2 ring-danger/15"
-      : "border-border focus:border-primary focus:ring-2 focus:ring-primary/15",
-  ].join(" ");
+/* ──────────────────────────── SPECS ──────────────────────────── */
+function Specs() {
+  const cards = [
+    { code: "/01", title: "One printer, full focus", body: "Flashforge Adventurer 5M, dialed in. Every job gets the same operator from request to handoff.", icon: "ti-focus-2" },
+    { code: "/02", title: "Honest, gram-based pricing", body: "Material × €0.05/g, minimum €0.75. No design fees on simple jobs. See the pricing page for the rest.", icon: "ti-coin-euro" },
+    { code: "/03", title: "PLA, PETG, TPU", body: "PLA in stock in most colors. PETG and TPU available on request — extra cost, longer lead time.", icon: "ti-flask-2" },
+    { code: "/04", title: "No data stored", body: "Requests go straight to email. No accounts, no tracking, no resold contact data.", icon: "ti-lock" },
+  ];
+  return (
+    <section className="relative border-b border-border">
+      <div className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+        <SectionLabel code="02" label="What you get" />
+        <h2 className="mt-4 max-w-2xl font-display text-4xl leading-tight md:text-5xl">
+          A small lab that treats your<br className="hidden md:block" />
+          <span className="italic text-primary">weird idea like a real job.</span>
+        </h2>
+
+        <div className="mt-12 grid gap-4 md:grid-cols-2">
+          {cards.map((c, i) => (
+            <motion.div
+              key={c.code}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: i * 0.05 }}
+              className="group relative overflow-hidden rounded-2xl border border-border bg-surface/50 p-6 transition-colors hover:bg-surface"
+            >
+              <div className="flex items-center justify-between font-mono text-[11px] text-subtle">
+                <span>{c.code}</span>
+                <i className={`ti ${c.icon} text-base text-primary`} />
+              </div>
+              <h3 className="mt-6 font-display text-2xl">{c.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{c.body}</p>
+              <div className="pointer-events-none absolute -bottom-12 -right-12 h-40 w-40 rounded-full bg-primary/10 opacity-0 blur-2xl transition-opacity group-hover:opacity-100" />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────────────────── PROCESS ──────────────────────────── */
+function Process() {
+  const steps = [
+    { n: "01", t: "You send a request", d: "Describe the part. Reference photos, dimensions, deadline — whatever you have." },
+    { n: "02", t: "I quote and confirm", d: "Short email back with material, color, est. weight, price, and ETA." },
+    { n: "03", t: "Printed and checked", d: "Sliced, printed, post-processed. Photo before handoff so you know what you're getting." },
+    { n: "04", t: "Pickup or shipped", d: "Local pickup in Eindhoven or shipped at cost. Whichever works for you." },
+  ];
+  return (
+    <section className="relative border-b border-border bg-surface/30">
+      <div className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+        <SectionLabel code="03" label="How it works" />
+        <h2 className="mt-4 max-w-2xl font-display text-4xl leading-tight md:text-5xl">Four steps, no portal.</h2>
+
+        <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-4">
+          {steps.map((s, i) => (
+            <motion.div
+              key={s.n}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="bg-background p-6"
+            >
+              <div className="font-mono text-[11px] text-subtle">STEP {s.n}</div>
+              <div className="mt-6 font-display text-2xl">{s.t}</div>
+              <p className="mt-2 text-sm text-muted-foreground">{s.d}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────────────────── CATEGORIES ──────────────────────────── */
+function Categories() {
+  const cats = [
+    { icon: "ti-printer", label: "3D Printing", desc: "Parts, models, accessories" },
+    { icon: "ti-puzzle", label: "Knex", desc: "Connectors, adapters, fillers" },
+    { icon: "ti-building-castle", label: "Lego", desc: "Custom bricks, mounts, holders" },
+    { icon: "ti-rocket", label: "Space", desc: "Rockets, satellites, scale models" },
+    { icon: "ti-building-carousel", label: "Roller Coaster", desc: "Track, train, small models" },
+  ];
+  return (
+    <section className="relative border-b border-border">
+      <div className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+        <SectionLabel code="04" label="Things people ask for" />
+        <h2 className="mt-4 max-w-2xl font-display text-4xl leading-tight md:text-5xl">
+          From "I lost the piece" to <span className="italic text-primary">"can you make this?"</span>
+        </h2>
+
+        <div className="mt-12 grid gap-3 md:grid-cols-3 lg:grid-cols-5">
+          {cats.map((c, i) => (
+            <motion.div
+              key={c.label}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.05 }}
+              className="group relative overflow-hidden rounded-xl border border-border bg-surface/40 p-5 transition-colors hover:border-border-strong hover:bg-surface"
+            >
+              <i className={`ti ${c.icon} text-2xl text-primary`} />
+              <div className="mt-6 font-medium">{c.label}</div>
+              <div className="mt-1 text-xs text-muted-foreground">{c.desc}</div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────────────────── CLOSING CTA ──────────────────────────── */
+function ClosingCTA() {
+  return (
+    <section className="relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 bg-grid bg-grid-fade opacity-50" />
+      <div className="relative mx-auto max-w-6xl px-5 py-24 text-center md:py-36">
+        <SectionLabel code="05" label="Your turn" centered />
+        <h2 className="mx-auto mt-6 max-w-3xl text-balance font-display text-5xl leading-[0.95] md:text-7xl">
+          Got an idea?<br />
+          <span className="italic text-primary">I'll make it real.</span>
+        </h2>
+        <p className="mx-auto mt-6 max-w-xl text-muted-foreground">
+          One form. One operator. Usually a reply within a day.
+        </p>
+        <Link
+          to="/request"
+          className="beam-wrap group mt-10 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 font-medium text-primary-foreground cta-glow transition-transform hover:-translate-y-0.5"
+        >
+          Start a request
+          <i className="ti ti-arrow-up-right text-lg transition-transform group-hover:rotate-45" />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function SectionLabel({ code, label, centered }: { code: string; label: string; centered?: boolean }) {
+  return (
+    <div className={`flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.25em] text-subtle ${centered ? "justify-center" : ""}`}>
+      <span className="text-primary">§{code}</span>
+      <span className="h-px w-6 bg-border-strong" />
+      <span>{label}</span>
+    </div>
+  );
 }
