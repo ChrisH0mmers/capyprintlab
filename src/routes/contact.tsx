@@ -102,14 +102,13 @@ function SectionLabel({ code, label }: { code: string; label: string }) {
 /* ──────── PLACEHOLDER COPY — edit these ──────── */
 
 const CHANNELS = [
-  { code: "/01", label: "Email", value: "hello@capymaki.com", desc: "Direct line. I read everything.", href: "mailto:hello@capymaki.com", external: false },
+  { code: "/01", label: "Email", value: "Currently unavaible", desc: "Direct line. I read everything.", href: "mailto:hello@capymaki.com", external: false },
   { code: "/02", label: "Instagram", value: "@capymaki", desc: "Build photos and behind-the-scenes.", href: "https://instagram.com/", external: true },
-  { code: "/03", label: "Local pickup", value: "Eindhoven, NL", desc: "Drop-off / pickup by appointment.", href: "mailto:hello@capymaki.com?subject=Pickup", external: false },
-  { code: "/04", label: "Collabs & press", value: "press@capymaki.com", desc: "Features, interviews, side projects.", href: "mailto:press@capymaki.com", external: false },
+  { code: "/03", label: "Local pickup", value: "Oss, NL", desc: "Drop-off / pickup by appointment.", href: "mailto:hello@capymaki.com?subject=Pickup", external: false },
 ];
 
 const INFO = [
   { label: "Response time", value: "< 24 hours", note: "Usually same day. Slower on weekends." },
-  { label: "Lab hours", value: "Mon – Sat", note: "Prints run overnight when needed." },
-  { label: "Languages", value: "EN · NL", note: "Reply in whichever you prefer." },
+  { label: "Lab hours", value: "Mon – Sun", note: "Long prints are usually done during weekends." },
+  { label: "Languages", value: "English/Dutch/German", note: "Reply in whichever you prefer." },
 ];
