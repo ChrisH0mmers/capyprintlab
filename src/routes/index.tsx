@@ -48,8 +48,7 @@ function Hero() {
             <span className="text-foreground">Printer Online</span>
             <span className="text-subtle">/ Adventurer 5M</span>
           </span>
-          <span className="hidden md:inline">— Est. 2024</span>
-          <span className="hidden md:inline">— Eindhoven, NL</span>
+          <span className="hidden md:inline">— Oss, NL</span>
         </motion.div>
 
         {/* wordmark */}
@@ -69,8 +68,7 @@ function Hero() {
             className="text-pretty text-base text-muted-foreground md:col-span-7 md:text-lg"
           >
             PrintLab is a one-person workshop. You send the idea, I print it
-            carefully on a single machine — no warehouses, no markup, no waiting
-            queue ten people deep. Parts, models, accessories, weird stuff. If it
+            carefully on a single machine. Parts, models, accessories, other stuff. If it
             can be sliced, it can probably be made.
           </motion.p>
 
@@ -139,7 +137,7 @@ function Specs() {
         <SectionLabel code="02" label="What you get" />
         <h2 className="mt-4 max-w-2xl font-display text-4xl leading-tight md:text-5xl">
           A small lab that treats your<br className="hidden md:block" />
-          <span className="italic text-primary">weird idea like a real job.</span>
+          <span className="italic text-primary"> idea like a real job.</span>
         </h2>
 
         <div className="mt-12 grid gap-4 md:grid-cols-2">
