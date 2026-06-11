@@ -162,7 +162,7 @@ const ROWS = [
 const EXAMPLES = [
   { icon: "ti-device-mobile", title: "3d printed karambit", detail: "PLA, Black.", weight: "~20 g", price: "€1" },
   { icon: "ti-puzzle", title: "Fruit and vegetables labels", detail: "Set of 12 labels", weight: "~10 g a piece", price: "€0.50 a piece" },
-  { icon: "ti-rocket", title: ""Pallet" coaster", detail: "PLA Wood", weight: "~30 g", price: "€1,33" },
+  { icon: "ti-rocket", title: '"Pallet" coaster', detail: "PLA Wood", weight: "~30 g", price: "€1,33" },
 ];
 
 const FAQ = [
